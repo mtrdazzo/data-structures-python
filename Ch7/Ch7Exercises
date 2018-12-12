@@ -1,0 +1,134 @@
+from singlyLinkedLists import Empty
+
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+
+def find_second_last_node(head):
+    """R-7.1
+
+       Give an algorithm for finding the second-to-last node in a singly
+       linked list in which the last node is indicated by a next reference
+       of None
+
+    """
+    follow = head
+
+    if head is None:
+        raise Empty("Linked list is empty")
+    elif head.next is None:
+        raise Empty("Not enough elements")
+    head = head.next
+
+    while head:
+        if head.next is None:
+            break
+        follow = follow.next
+        head = head.next
+
+    return follow.data
+
+
+def ll_concatenation(M, L):
+    """R-7.2
+
+       Describe a good algorithm for concatenating two singly linked lists L an M,
+       given only references to the first node of each list, into a single list
+       L' that contains all the nodes of L followed by all the nodes of M.
+
+    """
+    newll = None
+
+    if M is None and L is None:
+        return newll
+
+    if M:
+        newll = current_node = Node(M.data)
+        M = M.next
+
+        while M:
+            current_node.next = Node(M.data)
+            M = M.next
+            current_node = current_node.next
+    if L:
+        if not newll:
+            newll = current_node = Node(L.data)
+            L = L.next
+
+        while L:
+            current_node.next = Node(L.data)
+            L = L.next
+            current_node = current_node.next
+
+    return newll
+
+
+def print_ll(ll):
+
+    if ll is None:
+        raise Empty("Linked list is empty")
+
+    print(str(ll.data), end="")
+    while ll.next is not None:
+        print("->" + str(ll.next.data), end="")
+        ll = ll.next
+    print("")
+
+
+if __name__ == '__main__':
+    import unittest
+
+    class testSecondLastNode(unittest.TestCase):
+
+        def setUp(self):
+            pass
+
+        def tearDown(self):
+            pass
+
+        def test_empty_ll(self):
+
+            with self.assertRaises(Empty):
+                find_second_last_node(None)
+
+        def test_single_element_ll(self):
+
+            with self.assertRaises(Empty):
+                find_second_last_node(Node(1))
+
+        def test_more_than_one_element(self):
+
+            head = ll = Node(1)
+            for i in range(2, 11):
+                ll.next = Node(i)
+                ll = ll.next
+                self.assertTrue(find_second_last_node(head) == i-1)
+
+        def test_ll_concatenation(self):
+            #Two empty linked lists
+            # self.assertIsNone(ll_concatenation(None, None))
+
+            #Add one linked list to empty
+            L = Node(1)
+            L.next = Node(2)
+            M = None
+            M2 = ll_concatenation(M, L)
+            print_ll(M2)
+            M2 = ll_concatenation(L, M)
+            print_ll(M2)
+
+            #Add two linked lists
+            M = Node(3)
+            M.next = Node(4)
+            M2 = ll_concatenation(M, L)
+            print_ll(M2)
+            M2 = ll_concatenation(L, M)
+            print_ll(M2)
+            print_ll(
+                M)
+            print_ll(L)
+
+    unittest.main()
