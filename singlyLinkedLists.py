@@ -1,4 +1,5 @@
 class Empty(Exception):
+    """Simple Empty Exception"""
     pass
 
 
